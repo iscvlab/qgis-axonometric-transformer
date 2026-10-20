@@ -1,8 +1,8 @@
 # 📐 Axonometric Map Transformer - QGIS Plugin
 
-[![Version](https://img.shields.io/badge/Version-v1.2.1-blue.svg)](https://github.com/iscvlab/qgis-axonometric-transformer)
+[![Version](https://img.shields.io/badge/Version-v1.2.2-blue.svg)](https://github.com/iscvlab/qgis-axonometric-transformer)
 [![Portal](https://img.shields.io/badge/plugins.qgis.org-Approved%20%236219-brightgreen.svg)](https://plugins.qgis.org/plugins/axonometric_transformer/)
-[![Plugin Manager](https://img.shields.io/badge/Plugin%20Manager-v1.1.3%20Live%20%2F%20v1.2.1%20Pending-blue.svg)](https://plugins.qgis.org/plugins/axonometric_transformer/)
+[![Plugin Manager](https://img.shields.io/badge/Plugin%20Manager-v1.1.3%20Live%20%2F%20v1.2.2%20Pending-blue.svg)](https://plugins.qgis.org/plugins/axonometric_transformer/)
 [![QGIS 4 Ready](https://img.shields.io/badge/QGIS%204%20Ready-Local%20AST%20verified-brightgreen.svg)](https://github.com/iscvlab/qgis-axonometric-transformer)
 [![QGIS](https://img.shields.io/badge/QGIS-3.16%2B%20%2F%204.x-brightgreen.svg)](https://qgis.org)
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://python.org)
@@ -12,7 +12,7 @@
 > **Direct QGIS to 3D Axonometric & Isometric Plan Generator**  
 > Eliminates the manual *"Export 2D Map → Switch to Graphic Software → Skew/Rotate/Extrude"* pipeline. Transform the active QGIS map canvas, selected layer extents, or print layouts into presentation-ready 3D axonometric diagram plates with **1-click clipboard copy (`Ctrl+C` / `Cmd+C`)** directly into Adobe Illustrator, Affinity Designer, Photoshop, and slide presentations.
 
-**Release status (truth lock):** Approved on [plugins.qgis.org](https://plugins.qgis.org/plugins/axonometric_transformer/) as Plugin ID **6219** (`axonometric_transformer`). **v1.1.3** is LIVE with 1-click in-app install via **Plugins → Manage and Install Plugins**. **v1.2.1** (In-Memory Multi-Format Clipboard Engine, direct transparent PDF with alpha SMask, SVG/PNG formats, Qt6 scoped enums) is tagged on GitHub and registered on the portal, currently pending repository update review. Portal security scan: 100% pass, 0 issues. QGIS 4 Ready.
+**Release status (truth lock):** Approved on [plugins.qgis.org](https://plugins.qgis.org/plugins/axonometric_transformer/) as Plugin ID **6219** (`axonometric_transformer`). **v1.1.3** is LIVE with 1-click in-app install via **Plugins → Manage and Install Plugins**. **v1.2.2** (Multi-Format Transparent Clipboard Engine with PDF `/SMask`, SVG, PNG, OLE `IDataObject`, `CF_HDROP`, and Qt6 scoped enums) is tagged on GitHub and registered on the portal, currently pending repository update review. Portal security scan: 100% pass, 0 issues. QGIS 4 Ready.
 
 ---
 
@@ -42,7 +42,7 @@
 - **Base Plate Opacity with 5% Step Snapping**: Independent opacity slider with 5% notch snapping for both Framing Fill and 3D Base Plate.
 
 ### 4. 1-Click Multi-Format Clipboard & Export
-- **In-Memory Multi-Format Clipboard (`Ctrl+C` / `Cmd+C`)**: Zero-disk-file transit! Simultaneously registers in-memory vector PDF with transparent alpha soft mask (`/SMask`) for Adobe Illustrator and Affinity Designer, DIBv5 transparent bitmap for Windows apps, `image/svg+xml` for Figma, and `image/png` for Canva, Photoshop, and PowerPoint.
+- **Multi-Format Transparent Clipboard (`Ctrl+C` / `Cmd+C`)**: Simultaneously registers in-memory vector PDF with transparent alpha soft mask (`/SMask`) for Adobe Illustrator and Affinity Designer, `image/svg+xml` for Figma, 32-bit `image/png` for Canva, Photoshop, Office, Discord, and Slack, and `CF_HDROP` file URL for direct paste into Windows File Explorer (while suppressing `text/plain` so Illustrator never pastes a file-path text frame).
 - **Direct Adobe Illustrator Paste**: Pasting into Illustrator embeds clean, transparent-background vector artwork directly without white bounding boxes or clipping path degradation.
 - **Save High-Res PNG**: Saves directly to disk with transparent alpha channel.
 - **Insert into QGIS Print Layout**: Adds the transformed plate as a picture item directly into your open print layout.
@@ -56,7 +56,7 @@ Now available directly in the official QGIS repository:
 1. Open **QGIS Desktop** (3.16+).
 2. Navigate to **Plugins → Manage and Install Plugins...**
 3. Select the **All** tab and search for **`Axonometric Map Transformer`**.
-4. Click **Install Plugin** (installs active release v1.1.3; v1.2.1 updates automatically once portal validation clears).
+4. Click **Install Plugin** (installs active release v1.1.3; v1.2.2 updates automatically once portal validation clears).
  
 *(The leaf/cube icon will appear immediately in your Toolbar and under the **Plugins → Axonometric Map Transformer** menu).*
 
@@ -96,4 +96,4 @@ This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**
 - GitHub: [@napattan](https://github.com/napattan) · [ISCV | Isocurve Research Lab (@iscvlab)](https://github.com/iscvlab)
 - LinkedIn: [linkedin.com/in/napatphas](https://www.linkedin.com/in/napatphas/)
 - Repository: [qgis-axonometric-transformer](https://github.com/iscvlab/qgis-axonometric-transformer)
-- Portal listing: [plugins.qgis.org/plugins/axonometric_transformer](https://plugins.qgis.org/plugins/axonometric_transformer/) (ID 6219; v1.1.3 live in manager, v1.2.1 registered on portal)
+- Portal listing: [plugins.qgis.org/plugins/axonometric_transformer](https://plugins.qgis.org/plugins/axonometric_transformer/) (ID 6219; v1.1.3 live in manager, v1.2.2 registered on portal)

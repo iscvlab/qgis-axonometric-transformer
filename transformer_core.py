@@ -12,7 +12,7 @@ from typing import Iterable, List, Optional, Sequence, Tuple
 
 try:
     from qgis.PyQt.QtCore import (
-        Qt, QPointF, QRectF, QSize, QSizeF, QMarginsF, QMimeData, QByteArray, QBuffer, QIODevice
+        Qt, QPointF, QRectF, QSize, QSizeF, QMarginsF, QMimeData, QByteArray, QBuffer, QIODevice, QUrl
     )
     from qgis.PyQt.QtGui import (
         QImage, QPainter, QColor, QPen, QBrush, QPainterPath, QPolygonF, QPdfWriter, QPageSize, QPageLayout
@@ -22,7 +22,7 @@ try:
 except ImportError:
     try:
         from PyQt6.QtCore import (
-            Qt, QPointF, QRectF, QSize, QSizeF, QMarginsF, QMimeData, QByteArray, QBuffer, QIODevice
+            Qt, QPointF, QRectF, QSize, QSizeF, QMarginsF, QMimeData, QByteArray, QBuffer, QIODevice, QUrl
         )
         from PyQt6.QtGui import (
             QImage, QPainter, QColor, QPen, QBrush, QPainterPath, QPolygonF, QPdfWriter, QPageSize, QPageLayout
@@ -636,85 +636,20 @@ def _generate_in_memory_svg(image: "QImage", png_bytes: bytes) -> bytes:
         return b""
 
 
-def _copy_windows_in_memory(png_bytes: bytes, pdf_bytes: bytes, svg_bytes: bytes) -> bool:
-    """
-    Copy multi-format in-memory bundle to Windows clipboard (PDF + SVG + PNG).
-    - Adobe Illustrator: Pastes via native 'Portable Document Format' / 'PDF' as an EMBEDDED object
-      with 100% full alpha transparency (no black box, no diagonal 'X').
-    - Figma: Pastes via 'image/svg+xml'.
-    - Canva, Photoshop, Affinity, Discord, Office: Pastes via 'image/png' / 'PNG'.
-    - Zero files on disk, zero CF_HDROP, zero CF_DIB (avoids black background).
-    """
-    try:
-        import ctypes
-        from ctypes import wintypes
-
-        user32 = ctypes.windll.user32
-        kernel32 = ctypes.windll.kernel32
-
-        user32.OpenClipboard.argtypes = [wintypes.HWND]
-        user32.OpenClipboard.restype = wintypes.BOOL
-        user32.EmptyClipboard.restype = wintypes.BOOL
-        user32.SetClipboardData.argtypes = [wintypes.UINT, wintypes.HANDLE]
-        user32.SetClipboardData.restype = wintypes.HANDLE
-        user32.CloseClipboard.restype = wintypes.BOOL
-
-        kernel32.GlobalAlloc.argtypes = [wintypes.UINT, ctypes.c_size_t]
-        kernel32.GlobalAlloc.restype = wintypes.HGLOBAL
-        kernel32.GlobalLock.argtypes = [wintypes.HGLOBAL]
-        kernel32.GlobalLock.restype = ctypes.c_void_p
-        kernel32.GlobalUnlock.argtypes = [wintypes.HGLOBAL]
-        kernel32.GlobalUnlock.restype = wintypes.BOOL
-
-        GMEM_MOVEABLE = 0x0002
-
-        CF_PDF_FULL = user32.RegisterClipboardFormatW("Portable Document Format")
-        CF_PDF = user32.RegisterClipboardFormatW("PDF")
-        CF_SVG = user32.RegisterClipboardFormatW("image/svg+xml")
-        CF_PNG = user32.RegisterClipboardFormatW("PNG")
-        CF_PNG_MIME = user32.RegisterClipboardFormatW("image/png")
-
-        formats_to_set = []
-        if pdf_bytes:
-            if CF_PDF_FULL:
-                formats_to_set.append((CF_PDF_FULL, pdf_bytes))
-            if CF_PDF:
-                formats_to_set.append((CF_PDF, pdf_bytes))
-        if svg_bytes and CF_SVG:
-            formats_to_set.append((CF_SVG, svg_bytes))
-        if png_bytes:
-            if CF_PNG:
-                formats_to_set.append((CF_PNG, png_bytes))
-            if CF_PNG_MIME:
-                formats_to_set.append((CF_PNG_MIME, png_bytes))
-
-        if not user32.OpenClipboard(None):
-            return False
-        user32.EmptyClipboard()
-
-        for fmt_id, data in formats_to_set:
-            h_mem = kernel32.GlobalAlloc(GMEM_MOVEABLE, len(data))
-            if h_mem:
-                ptr = kernel32.GlobalLock(h_mem)
-                if ptr:
-                    ctypes.memmove(ptr, data, len(data))
-                    kernel32.GlobalUnlock(h_mem)
-                    user32.SetClipboardData(fmt_id, h_mem)
-
-        user32.CloseClipboard()
-        return True
-    except Exception:
-        return False
-
-
 def copy_image_to_clipboard(image: "QImage", filename_tag: str = "") -> bool:
     """
-    Copy a QImage to the OS clipboard as an in-memory multi-format transparent bundle (PDF + SVG + PNG).
-    Pastes directly as a 100% transparent EMBEDDED graphic across Adobe Illustrator,
-    Photoshop, Affinity Designer, Canva, and Figma without generating any files on disk.
+    Copy a QImage to the OS clipboard as a multi-format transparent bundle.
+    - Adobe Illustrator & Affinity Designer: Pastes in-memory vector/PDF stream with 100% alpha transparency (/SMask).
+    - Figma & web design apps: Pastes in-memory SVG and 32-bit PNG.
+    - Photoshop, Microsoft Office, Canva, Discord, Slack, etc.: Pastes transparent PNG.
+    - Windows File Explorer: Pastes clean temporary PNG file directly via CF_HDROP.
     """
     if not HAS_QT or image is None or image.isNull():
         return False
+
+    import os
+    import re
+    import tempfile
 
     export = image
     if image.format() == QImage.Format.Format_ARGB32_Premultiplied:
@@ -734,28 +669,45 @@ def copy_image_to_clipboard(image: "QImage", filename_tag: str = "") -> bool:
     # 3. In-memory SVG bytes (with embedded base64 32-bit PNG for Figma & vector tools)
     svg_bytes = _generate_in_memory_svg(export, png_bytes)
 
-    # On Windows, inject the multi-format memory bundle (PDF + SVG + PNG, no CF_DIB / no CF_HDROP)
-    import sys
-    if sys.platform == "win32":
-        if _copy_windows_in_memory(png_bytes, pdf_bytes, svg_bytes):
-            return True
+    # 4. Save clean temporary PNG for CF_HDROP (file paste into Explorer, Photoshop, Slack, etc.)
+    temp_path = None
+    try:
+        temp_dir = tempfile.gettempdir()
+        clean_tag = re.sub(r'[^a-zA-Z0-9_\-]', '_', filename_tag).strip('_') if filename_tag else ""
+        tag_suffix = f"_{clean_tag}" if clean_tag else ""
+        temp_path = os.path.join(temp_dir, f"qgis_axonometric{tag_suffix}.png")
+        export.save(temp_path, "PNG")
+    except Exception:
+        temp_path = None
 
-    # Cross-platform Qt clipboard fallback (macOS, Linux)
+    # 5. Populate Qt QMimeData (registers OLE IDataObject on Windows, NSPasteboard on macOS, Wayland/X11 on Linux)
     clipboard = QApplication.clipboard()
     if clipboard is None:
         return False
 
     mime_data = QMimeData()
+
+    # Standard PNG MIME formats (read by Chromium, Figma, Discord, Slack, etc.)
+    mime_data.setData("image/png", byte_array)
+    mime_data.setData("PNG", byte_array)
+    mime_data.setData("image/x-png", byte_array)
+    mime_data.setData("public.png", byte_array)
+
+    # Vector & Embedded formats (Illustrator, Affinity Designer, Figma)
+    if svg_bytes:
+        mime_data.setData("image/svg+xml", svg_bytes)
     if pdf_bytes:
         mime_data.setData("application/pdf", pdf_bytes)
         mime_data.setData("Portable Document Format", pdf_bytes)
         mime_data.setData("PDF", pdf_bytes)
-    if svg_bytes:
-        mime_data.setData("image/svg+xml", svg_bytes)
-    mime_data.setData("PNG", byte_array)
-    mime_data.setData("image/png", byte_array)
-    mime_data.setData("image/x-png", byte_array)
-    mime_data.setData("public.png", byte_array)
+
+    # File URL / CF_HDROP (read by Windows Explorer, Photoshop, Discord, etc.)
+    # NOTE 1: DO NOT call mime_data.setText(temp_path)! Calling setText causes Illustrator to paste
+    # a TextFrame containing the file path string instead of pasting the graphic!
+    # NOTE 2: DO NOT call mime_data.setImageData(export)! On Windows, Qt's setImageData registers legacy
+    # GDI CF_DIB which lacks alpha mask and causes Illustrator to render a solid black box!
+    if temp_path and os.path.exists(temp_path):
+        mime_data.setUrls([QUrl.fromLocalFile(temp_path)])
 
     clipboard.setMimeData(mime_data)
     return True

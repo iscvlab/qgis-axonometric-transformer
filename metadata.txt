@@ -5,22 +5,23 @@ qgisMinimumVersion=3.16
 description=Instantly capture active QGIS map canvas, selected layers, or print layouts and transform into true Isometric / Dimetric / Oblique Axonometric 3D diagrams with 1-click clipboard copy and high-res PNG export.
 about=Architectural & landscape axonometric diagram generator for QGIS. Automatically applies true isometric (30°-30° / 57.74 percent squash), dimetric (2:1), or military oblique projections with circular site disc clipping, 3D base plate extrusion, tight bounding frames, and instant OS clipboard copy for seamless pasting into Adobe Illustrator, Affinity Designer, Photoshop, and presentation decks.
 category=Cartography
-version=1.2.1
+version=1.2.2
 author=Napat Phasundhiae
 email=tanfasantia@gmail.com
-homepage=https://github.com/napattan/qgis-axonometric-transformer
-tracker=https://github.com/napattan/qgis-axonometric-transformer/issues
-repository=https://github.com/napattan/qgis-axonometric-transformer
+homepage=https://github.com/iscvlab/qgis-axonometric-transformer
+tracker=https://github.com/iscvlab/qgis-axonometric-transformer/issues
+repository=https://github.com/iscvlab/qgis-axonometric-transformer
 experimental=False
 deprecated=False
 icon=icon.png
 tags=axonometric,isometric,3d,cartography,diagram,architecture,export,clipboard,illustrator,affinity
-changelog=1.2.1:
-    - In-Memory Multi-Format Clipboard Engine: Direct embedded paste with transparent background into Adobe Illustrator and Affinity Designer via in-memory PDF with soft mask alpha (/SMask).
-    - Added image/svg+xml clipboard format for Figma and image/png for Canva, Photoshop, and Microsoft Office.
-    - Zero temporary disk files during clipboard copy (100 percent in-memory transit).
-    - Fixed Qt6 AST forward-compatibility: explicitly scoped QPageSize.Unit.Point and QPageLayout.Orientation.Portrait for the in-memory PDF writer (QGIS 4 Ready).
-    - 100 percent Flake8 PEP8 code quality compliance (0 violations).
+changelog=1.2.2:
+    - Fixed Windows multi-format clipboard integration: Restored OLE IDataObject and CF_HDROP clipboard pipeline for seamless transparent paste across Adobe Illustrator, Figma, Photoshop, Affinity Designer, Microsoft Office, Discord, Slack, and Windows File Explorer.
+    - Resolved issue where Windows clipboard emptied without standard formats, preventing paste into external design applications.
+    - Suppressed text/plain format from clipboard bundle to prevent Illustrator from mistakenly pasting a text frame containing file path instead of the graphic.
+    - Fixed Qt6 QUrl import for clean cross-platform URL resolution.
+    - 100 percent Flake8 PEP8 code quality compliance (0 violations) and QGIS 4 Ready.
+
 
 
 
