@@ -1,9 +1,9 @@
 # 📐 Axonometric Map Transformer - QGIS Plugin
 
-[![Version](https://img.shields.io/badge/Version-v1.2.1-blue.svg)](https://github.com/napattan/qgis-axonometric-transformer)
+[![Version](https://img.shields.io/badge/Version-v1.2.1-blue.svg)](https://github.com/iscvlab/qgis-axonometric-transformer)
 [![Portal](https://img.shields.io/badge/plugins.qgis.org-Approved%20%236219-brightgreen.svg)](https://plugins.qgis.org/plugins/axonometric_transformer/)
 [![Plugin Manager](https://img.shields.io/badge/Plugin%20Manager-v1.1.3%20Live%20%2F%20v1.2.1%20Pending-blue.svg)](https://plugins.qgis.org/plugins/axonometric_transformer/)
-[![QGIS 4 Ready](https://img.shields.io/badge/QGIS%204%20Ready-Local%20AST%20verified-brightgreen.svg)](https://github.com/napattan/qgis-axonometric-transformer)
+[![QGIS 4 Ready](https://img.shields.io/badge/QGIS%204%20Ready-Local%20AST%20verified-brightgreen.svg)](https://github.com/iscvlab/qgis-axonometric-transformer)
 [![QGIS](https://img.shields.io/badge/QGIS-3.16%2B%20%2F%204.x-brightgreen.svg)](https://qgis.org)
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg)](https://python.org)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -93,7 +93,7 @@ This project is licensed under the **GNU General Public License v3.0 (GPL-3.0)**
 
 **Napat Phasundhiae**  
 *Computational Design Technologist | Spatial Analytics • Urban & Environmental Simulation • Workflow Automation*  
-- GitHub: [@napattan](https://github.com/napattan)
+- GitHub: [@napattan](https://github.com/napattan) · [ISCV | Isocurve Research Lab (@iscvlab)](https://github.com/iscvlab)
 - LinkedIn: [linkedin.com/in/napatphas](https://www.linkedin.com/in/napatphas/)
-- Repository: [qgis-axonometric-transformer](https://github.com/napattan/qgis-axonometric-transformer)
+- Repository: [qgis-axonometric-transformer](https://github.com/iscvlab/qgis-axonometric-transformer)
 - Portal listing: [plugins.qgis.org/plugins/axonometric_transformer](https://plugins.qgis.org/plugins/axonometric_transformer/) (ID 6219; v1.1.3 live in manager, v1.2.1 registered on portal)
