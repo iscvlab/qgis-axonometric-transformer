@@ -10,7 +10,7 @@
 
 **Axonometric Map Transformer** (`axonometric_transformer`, **Official QGIS Plugin ID `#6219`**, `v1.2.2 LIVE` on [`plugins.qgis.org`](https://plugins.qgis.org/plugins/axonometric_transformer/)) is a 1-click **2D-to-3D isometric, dimetric, and oblique map diagram engine** engineered by **[ISCV | Isocurve Research Lab (`@iscvlab`)](https://github.com/iscvlab)**. It eliminates the manual *"Export 2D Map → Switch to CAD/Illustrator → Rotate → Shear → Squash → Clip → Extrude Slab"* pipeline—transforming the active QGIS map canvas, selected vector layer extents, or print layouts into presentation-ready 3D axonometric plates with **1-click transparent clipboard copy (`Ctrl+C` / `Cmd+C`)** directly into **Adobe Illustrator, Figma, Affinity Designer, Photoshop, and presentation decks**.
 
-Sister toolkits & upstream contributions: **[boostx](https://github.com/iscvlab/boostx)** (13-Skill `/x*` Agent Ecosystem & `/xpublish` Qt6 Packager) · **[mcp-bridges](https://github.com/iscvlab/mcp-bridges)** (`/qgis`, `/rhino`, `/grasshopper`, `/illustrator`, `/figma` MCP Bridges) · **[xocr](https://github.com/iscvlab/xocr)** (Hybrid Document AI & Local `SCB 10X Typhoon-OCR v1.5` × `Baidu Unlimited-OCR-2` Engine · **[Upstream PR #15 to `scb-10x/typhoon-ocr`](https://github.com/scb-10x/typhoon-ocr/pull/15)**).
+Sister toolkits & upstream contributions: **[xboost](https://github.com/iscvlab/xboost)** (15-Skill `/x*` Agent Ecosystem & `/xpublish` Qt6 Packager, `v3.5.0`) · **[mcp-bridges](https://github.com/iscvlab/mcp-bridges)** (`/qgis`, `/rhino`, `/grasshopper`, `/illustrator`, `/figma` MCP Bridges) · **[xocr](https://github.com/iscvlab/xocr)** (Hybrid Document AI & Local `SCB 10X Typhoon-OCR v1.5` × `Baidu Unlimited-OCR-2` Engine · **[Upstream PR #15 to `scb-10x/typhoon-ocr`](https://github.com/scb-10x/typhoon-ocr/pull/15)**).
 
 ---
 
@@ -178,7 +178,7 @@ axonometric_transformer/
 ## 4. Author, Related Toolkits & License
 
 - **[Official QGIS Plugin Portal Listing (`#6219`)](https://plugins.qgis.org/plugins/axonometric_transformer/)**: Live `v1.2.2` release (`QGIS 4 Ready`, `100%` security scan pass).
-- **[boostx (`v3.3.0`)](https://github.com/iscvlab/boostx)**: Composable 13-skill `/x*` AI agent ecosystem (including `/xpublish` `package_qgis.py` & `check_qt6.py` used to package and verify this plugin).
+- **[xboost (`v3.5.0`)](https://github.com/iscvlab/xboost)**: Composable 15-skill `/x*` AI agent ecosystem (including `/xpublish` `package_qgis.py` & `check_qt6.py` used to package and verify this plugin).
 - **[mcp-bridges](https://github.com/iscvlab/mcp-bridges)**: Model Context Protocol automation bridges for **QGIS (`/qgis`), Rhino 3D, Grasshopper, Adobe Illustrator, and Figma**.
 - **[xocr (`v2.1.0`)](https://github.com/iscvlab/xocr)**: High-speed C++ PyMuPDF vector/table extractor & local `SCB 10X Typhoon-OCR v1.5` × `Baidu Unlimited-OCR-2` Document AI engine (**[Upstream PR #15 to `scb-10x/typhoon-ocr`](https://github.com/scb-10x/typhoon-ocr/pull/15)**).
 
